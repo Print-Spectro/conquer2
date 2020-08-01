@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
-import videoSource from '../../media/HomeBackgroundVideo.mp4';
+// import videoSource from '../../media/HomeBackgroundVideo.mp4';
+import videoSource from '../../media/fireball.mp4';
 import './Video.css';
 
 function Video() {
@@ -16,7 +17,7 @@ function Video() {
 	};
 	return (
 		<div className="video">
-			<video muted autoPlay className="home-video" id="home-video">
+			<video muted autoPlay loop className="home-video" id="home-video">
 				<source playsInline src={videoSource} type="video/mp4" alt="This is Sparta!" />
 				What kind of browser version are you on... Your browser unfortunately does not yet support the video
 				tag!
