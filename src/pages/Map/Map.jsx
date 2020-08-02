@@ -91,7 +91,6 @@ class GameMap extends Component {
 
 		socket.onmessage = (msg) => {
 			var action = JSON.parse(msg.data);
-			console.log(action);
 			window.clearInterval(keepAlive);
 			keepAlive = window.setInterval(() => {
 				socket.send('{}');
@@ -108,6 +107,13 @@ class GameMap extends Component {
 					} else {
 						if (action.Player !== '') {
 							countryStates[action.Country].Troops += action.Troops;
+							if (countryStates[action.Country].Troops < 0) {
+								alert(
+									'Looks like u have a negative value.The ID is: ' +
+										action.ID +
+										'pls tell the developers this'
+								);
+							}
 						} else {
 							countryStates[action.Country].Troops = action.Troops;
 						}
@@ -119,12 +125,14 @@ class GameMap extends Component {
 						playerColours[action.Player] = action.Country;
 						players.push(action.Player);
 					}
+					break;
 				case 'won':
-					if (user == action.Player) {
-						window.location.replace('https://www.youtube.com/watch?v=tS_2hEmGnzA');
-					} else {
-						window.location.replace('https://www.youtube.com/watch?v=dQw4w9WgXcQ');
-					}
+					alert(action.Player + ' won');
+				/*if (user == action.Player) {
+                window.location.replace("https://www.youtube.com/watch?v=tS_2hEmGnzA");
+            } else {
+                window.location.replace("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+            }*/
 			}
 			this.forceUpdate();
 		};

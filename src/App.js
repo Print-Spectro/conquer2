@@ -25,6 +25,7 @@ class App extends React.Component {
 							<Route path="/game_intro" component={Redirector} />
 							<Route path="/map" component={GameMap} />
 							<Route path="/error" component={ErrorPage} />
+
 							{/* ALPHA TESTING PURPOSES ONLY. PROHIBIT PUBLIC ACCESS*/}
 							<Route path="/alpha" component={Intro2} />
 						</div>
