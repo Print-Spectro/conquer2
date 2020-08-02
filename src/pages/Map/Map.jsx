@@ -3,7 +3,6 @@ import { connect, loaddetails } from '../../websockets/index.js';
 import { Paper, makeStyles, Grid } from '@material-ui/core';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import VectorMap from './VectorMap';
-import WaitingRoom from './WaitingRoom';
 import './Map.css';
 import { Options, OptionsDeploy, DonateForm } from './ActionButtons';
 import { SpyDetails, PlayerBox, Title } from './Texts';
@@ -30,9 +29,6 @@ var user = '';
 //Interval for troop drops
 var interval;
 var start;
-
-//Type of game this is.
-var gamemode;
 
 function getUserTroops() {
 	let userCountries = 0;
@@ -81,13 +77,8 @@ function getInterval() {
 	}
 }
 
-function getGamemode() {
-	return document.cookie.split('; ').map((s) => s.split('=')).filter((arr) => arr[0] == 'type')[0][1];
-}
-
 class GameMap extends Component {
 	constructor() {
-		this.state = { atLobby: true };
 		super();
 		socket = connect();
 		var keepAlive = (keepAlive = window.setInterval(() => {
@@ -96,10 +87,7 @@ class GameMap extends Component {
 
 		//Ascertain from cookies the base troop drop time intervals
 		interval = getInterval();
-		//Ascertain from cookies the start time of the game instance
 		start = getStartTime();
-		//Ascertain from cookies the type of game being played
-		gamemode = getGamemode();
 
 		socket.onmessage = (msg) => {
 			var action = JSON.parse(msg.data);
@@ -447,6 +435,7 @@ class GameMap extends Component {
 						</Grid>
 					</Paper>
 				) : null}
+				;
 				<VectorMap
 					setname={setname}
 					setpop_est={setpop_est}
@@ -462,9 +451,8 @@ class GameMap extends Component {
 		);
 	}
 
-	//TODO: Show waitingroom instead
 	render() {
-		return this.state.atLobby ? <WaitingRoom playerColours={playerColours} /> : <this.SideBar />;
+		return <this.SideBar />;
 	}
 }
 

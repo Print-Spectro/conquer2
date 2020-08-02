@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import './WaitingRoom.css';
-import { PlayerBox } from './Texts';
 
 export default class WaitingRoom extends Component {
 	render() {
@@ -32,8 +31,6 @@ export default class WaitingRoom extends Component {
 							})}
 						</div>
 					</div>
-
-					<PlayerBox />
 				</body>
 			</div>
 		);
