@@ -17,10 +17,9 @@ class App extends React.Component {
 				<Router>
 					<Switch>
 						<div>
-							<Route exact path="/" component={NewHome} />
-							// <Route exact path="/" component={Home} />
+							{/* <Route exact path="/" component={NewHome} /> */}
+							<Route exact path="/" component={Home} />
 							<Route path="/home" component={Home} />
-							<Route exact path="/waiting" component={WaitingRoom} />
 							<Route path="/underdev" component={UnderConstruction} />
 							<Route path="/game" component={GameMap} />
 							<Route path="/game_intro" component={Redirector} />
