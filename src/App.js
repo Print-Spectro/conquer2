@@ -7,6 +7,8 @@ import GameMap from './pages/Map/Map.jsx';
 import Intro2 from './shashgonenuts/intro2.jsx';
 import ErrorPage from './pages/Extra/Error.jsx';
 import Redirector from './pages/Extra/Redirector.jsx';
+import NewHome from './pages/NewDesign/NewHome.js';
+import WaitingRoom from './pages/Map/WaitingRoom.jsx';
 
 class App extends React.Component {
 	render() {
@@ -15,14 +17,15 @@ class App extends React.Component {
 				<Router>
 					<Switch>
 						<div>
-							<Route exact path="/" component={Home} />
+							<Route exact path="/" component={NewHome} />
+							// <Route exact path="/" component={Home} />
 							<Route path="/home" component={Home} />
+							<Route exact path="/waiting" component={WaitingRoom} />
 							<Route path="/underdev" component={UnderConstruction} />
 							<Route path="/game" component={GameMap} />
 							<Route path="/game_intro" component={Redirector} />
 							<Route path="/map" component={GameMap} />
 							<Route path="/error" component={ErrorPage} />
-
 							{/* ALPHA TESTING PURPOSES ONLY. PROHIBIT PUBLIC ACCESS*/}
 							<Route path="/alpha" component={Intro2} />
 						</div>

@@ -1,0 +1,41 @@
+.backdrop {
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	background-image: url("../../media/conquer2.jpeg");
+	min-width: 100%;
+	min-height: 100%;
+	-webkit-filter: blur(18px);
+	-o-filter: blur(18px);
+	filter: blur(18px);
+	z-index: -100;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-ms-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+    
+    .container {
+        text-align: center;
+    }
+
+    .container h2 {
+        color: orange;
+        
+    }
+
+    .player-list {
+        text-align: center;
+        height: 80%;
+        width: 20%;
+        position: fixed;
+        background-color: gray;
+        opacity: 0.5;
+        z-index: 1;
+        left: 0;
+        bottom: 0;
+        overflow: hidden;
+        padding-top: 20px;
+    }
