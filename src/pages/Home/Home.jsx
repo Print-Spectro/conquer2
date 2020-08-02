@@ -1,18 +1,16 @@
 import React, { Component } from 'react';
 import StartGameBox from './StartGameBox';
+import Video from './Video.jsx';
 import Grid from '@material-ui/core/Grid';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import Typography from '@material-ui/core/Typography';
 import CssBaseline from '@material-ui/core/CssBaseline';
-// import videoSource from '../../media/HomeBackgroundVideo.mp4';
-import videoSource from '../../media/fireball.mp4';
 import './Home.css';
 
 class Home extends Component {
 	render() {
 		return (
 			<div className="home-page">
-				<Video />
 				<CssBaseline />
 				<Grid container>
 					<Grid item xs={12}>
@@ -22,24 +20,13 @@ class Home extends Component {
 						<Typography variant="subtitle1">Fight to the death...</Typography>
 					</Grid>
 				</Grid>
+				<Video />
 				<StartGameBox />
 				<Footer />
 			</div>
 		);
 	}
 }
-
-const Video = () => {
-	return (
-		<div class="fullscreen-bg">
-			<video muted autoPlay loop className="fullscreen-bgvideo" id="home-video">
-				<source playsInline src={videoSource} type="video/mp4" alt="This is Sparta!" />
-				What kind of browser version are you on... Your browser unfortunately does not yet support the video
-				tag!
-			</video>
-		</div>
-	);
-};
 
 function Footer() {
 	return (

@@ -31,6 +31,9 @@ var user = '';
 var interval;
 var start;
 
+//Type of game this is.
+var gamemode;
+
 function getUserTroops() {
 	let userCountries = 0;
 	for (var c in countryStates) {
@@ -78,6 +81,10 @@ function getInterval() {
 	}
 }
 
+function getGamemode() {
+	return document.cookie.split('; ').map((s) => s.split('=')).filter((arr) => arr[0] == 'type')[0][1];
+}
+
 class GameMap extends Component {
 	constructor() {
 		this.state = { atLobby: true };
@@ -89,7 +96,10 @@ class GameMap extends Component {
 
 		//Ascertain from cookies the base troop drop time intervals
 		interval = getInterval();
+		//Ascertain from cookies the start time of the game instance
 		start = getStartTime();
+		//Ascertain from cookies the type of game being played
+		gamemode = getGamemode();
 
 		socket.onmessage = (msg) => {
 			var action = JSON.parse(msg.data);
@@ -437,7 +447,6 @@ class GameMap extends Component {
 						</Grid>
 					</Paper>
 				) : null}
-				;
 				<VectorMap
 					setname={setname}
 					setpop_est={setpop_est}
