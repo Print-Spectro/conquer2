@@ -1,9 +1,10 @@
-package main
+package mongodb
 
 import (
 	"context"
 	"fmt"
 	"log"
+	"os"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/bson"
@@ -15,7 +16,8 @@ const mongoTemplate = "mongodb+srv://conquer2admin:%s@cluster0.qnrve.mongodb.net
 var mongoURI string
 
 func init() {
-	mongoURI = fmt.Sprintf(mongoTemplate, "CONQUER2.0", "leaderboards")
+	mongoURI = fmt.Sprintf(mongoTemplate, os.Getenv("mongoPassword"), os.Getenv("mongoDBName"))
+	fmt.Println(mongoURI)
 }
 
 //NewMongo connects to the mongodb instance
@@ -41,13 +43,12 @@ func WriteToCollection(client *mongo.Client, database, collection string, data i
 	return err
 }
 
-
-func ReadFromCollection(client *mongo.Client, database, collection string) []*pokemon {
+func ReadFromCollection(client *mongo.Client, database, collection string, limit int64) []*pokemon {
 	col := client.Database(database).Collection(collection)
 
 	// Pass these options to the Find method
 	findOptions := options.Find()
-	findOptions.SetLimit(2)
+	findOptions.SetLimit(limit)
 
 	// Here's an array in which you can store the decoded documents
 	var results []*pokemon
@@ -110,6 +111,6 @@ func main() {
 	// })
 
 	// Reads from leaderboard db
-	winners := ReadFromCollection(client, "leaderboards", "winners")
+	winners := ReadFromCollection(client, "leaderboards", "winners", 3)
 	fmt.Println("Found multiple documents (array of pointers): %+v\n", winners)
 }

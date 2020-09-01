@@ -13,6 +13,7 @@ import (
 	firebase "firebase.google.com/go"
 	"github.com/Akshat-Tripathi/conquer2/internal/chat"
 	"github.com/Akshat-Tripathi/conquer2/internal/game"
+	"github.com/Akshat-Tripathi/conquer2/internal/mongodb"
 	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
 	"google.golang.org/api/option"
@@ -34,6 +35,8 @@ func main() {
 	gin.SetMode(gin.ReleaseMode)
 	r := gin.Default()
 
+	mongoClient := mongodb.NewMongo()
+
 	events := make(chan game.Event)
 
 	client, games := loadGames(colours, r, events)
@@ -50,7 +53,7 @@ func main() {
 			case game.PlayerLost:
 				leaderBoard.push(event.ID, event.Data.(string))
 			case game.Finished:
-				leaderBoard.flush(event.ID)
+				leaderBoard.flush(mongoClient, event.ID)
 				delete(games, event.ID)
 				delete(rooms, event.ID)
 			}
