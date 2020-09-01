@@ -1,12 +1,11 @@
 package main
 
 import (
-	"encoding/json"
+	"context"
 	"fmt"
-	"log"
-	"net/http"
 	"testing"
 
+	"github.com/Akshat-Tripathi/conquer2/internal/mongodb"
 	"github.com/go-playground/assert/v2"
 )
 
@@ -34,22 +33,10 @@ func TestPush(t *testing.T) {
 
 func TestFlush(t *testing.T) {
 	l := initLeaderBoard()
-
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		decoder := json.NewDecoder(r.Body)
-		var msg message
-
-		err := decoder.Decode(&msg)
-		if err != nil {
-			log.Fatalln("Invalid input")
-		}
-
-		assert.Equal(t, msg.Items, [3]string{"9", "8", "7"})
-	})
-
-	go http.ListenAndServe(":8080", nil)
+	m := mongodb.NewMongo()
+	defer m.Disconnect(context.TODO())
 
 	for i := 0; i < 10; i++ {
-		l.flush("http://localhost:8080", fmt.Sprint(i))
+		l.flush(m, fmt.Sprint(i))
 	}
 }

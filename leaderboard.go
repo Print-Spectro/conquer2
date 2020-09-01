@@ -1,11 +1,10 @@
 package main
 
 import (
-	"bytes"
-	"encoding/json"
-	"log"
-	"net/http"
 	"time"
+
+	"github.com/Akshat-Tripathi/conquer2/internal/mongodb"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type leaderBoard struct {
@@ -32,18 +31,11 @@ func (l *leaderBoard) push(id, name string) {
 	l.games[id] = board
 }
 
-func (l *leaderBoard) flush(url, id string) {
+func (l *leaderBoard) flush(client *mongo.Client, id string) {
 	defer delete(l.games, id)
-	msg, err := json.Marshal(message{
+	mongodb.WriteToCollection(client, "leaderboards", "winners", message{
 		ID:    id,
 		UTC:   time.Now().Unix(),
 		Items: l.games[id],
 	})
-	if err != nil {
-		log.Println(err)
-	}
-	_, err = http.Post(url, "application/json", bytes.NewBuffer(msg))
-	if err != nil {
-		log.Println(err)
-	}
 }
