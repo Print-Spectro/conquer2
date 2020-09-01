@@ -36,6 +36,7 @@ func main() {
 	r := gin.Default()
 
 	mongoClient := mongodb.NewMongo()
+	defer mongoClient.Disconnect(context.TODO())
 
 	events := make(chan game.Event)
 

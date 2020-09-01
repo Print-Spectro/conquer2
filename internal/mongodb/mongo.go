@@ -6,8 +6,9 @@ import (
 	"log"
 	"os"
 
-	"go.mongodb.org/mongo-driver/mongo"
+	"github.com/cheekybits/genny/generic"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
@@ -15,9 +16,10 @@ const mongoTemplate = "mongodb+srv://conquer2admin:%s@cluster0.qnrve.mongodb.net
 
 var mongoURI string
 
+type CollectionType = generic.Type
+
 func init() {
 	mongoURI = fmt.Sprintf(mongoTemplate, os.Getenv("mongoPassword"), os.Getenv("mongoDBName"))
-	fmt.Println(mongoURI)
 }
 
 //NewMongo connects to the mongodb instance
@@ -43,15 +45,16 @@ func WriteToCollection(client *mongo.Client, database, collection string, data i
 	return err
 }
 
-func ReadFromCollection(client *mongo.Client, database, collection string, limit int64) []*pokemon {
+//ReadCollectionTypeFromCollection reads the n most recent CollectionType from a collection
+func ReadCollectionTypeFromCollection(client *mongo.Client, database, collection string, limit int) []*CollectionType {
 	col := client.Database(database).Collection(collection)
 
 	// Pass these options to the Find method
 	findOptions := options.Find()
-	findOptions.SetLimit(limit)
+	findOptions.SetLimit(int64(limit))
 
 	// Here's an array in which you can store the decoded documents
-	var results []*pokemon
+	var results []*CollectionType
 
 	// Passing bson.D{{}} as the filter matches all documents in the collection
 	cur, err := col.Find(context.TODO(), bson.D{{}}, findOptions)
@@ -62,9 +65,9 @@ func ReadFromCollection(client *mongo.Client, database, collection string, limit
 	// Finding multiple documents returns a cursor
 	// Iterating through the cursor allows us to decode documents one at a time
 	for cur.Next(context.TODO()) {
-		
+
 		// create a value into which the single document can be decoded
-		var elem pokemon
+		var elem CollectionType
 		err := cur.Decode(&elem)
 		if err != nil {
 			log.Fatal(err)
@@ -80,37 +83,5 @@ func ReadFromCollection(client *mongo.Client, database, collection string, limit
 	// Close the cursor once finished
 	cur.Close(context.TODO())
 
-	// fmt.Println("Found multiple documents (array of pointers): %+v\n", results)
-	fmt.Println()
 	return results
-}
-
-type Leaderboards struct {
-	GameID string
-	Winner1 string
-	Winner2 string
-	Winner3 string
-	Gamemode string
-	Timestamp string
-}
-
-type pokemon struct {
-	Name   string
-	Type   string
-	Height int
-}
-
-func main() {
-	client := NewMongo()
-
-	// Writes to leaderboard winners collection
-	// WriteToCollection(client, "leaderboards", "winners", pokemon{
-	// 	Name:   "Pikachu",
-	// 	Type:   "Electric",
-	// 	Height: 3,
-	// })
-
-	// Reads from leaderboard db
-	winners := ReadFromCollection(client, "leaderboards", "winners", 3)
-	fmt.Println("Found multiple documents (array of pointers): %+v\n", winners)
 }
